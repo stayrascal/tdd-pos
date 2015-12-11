@@ -17,6 +17,12 @@ public class Goods implements DiscountObservable  {
         discountPromotions = new LinkedList<>();
     }
 
+    public Goods(String barcode, double price, LinkedList<DiscountPromotion> discountPromotions) {
+        this.barcode = barcode;
+        this.price = price;
+        this.discountPromotions = discountPromotions;
+    }
+
     public String getBarcode() {
         return barcode;
     }
