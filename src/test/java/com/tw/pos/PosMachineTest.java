@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class PosMachineTest {
@@ -35,7 +36,8 @@ public class PosMachineTest {
 
         double price = posMachine.calculate(cartItem);
 
-        assertThat(price, is(80d));
+        assertEquals(price, 80d, 1E-5);
+        //assertThat(price, is(80d));
     }
 
     @Test
@@ -47,7 +49,45 @@ public class PosMachineTest {
         double price = posMachine.calculate(cartItem);
         discountPromotions.forEach(DiscountPromotion::cancle);
 
-        assertThat(price, is(56d));
+        assertEquals(price, 56d, 1E-5);
+        //assertThat(price, is(56d));
+    }
+
+    @Test
+    public void theTotalPriceOfSimpleTypeGoodsShouldBe56WhenDiscountItem000001TwoTimes(){
+        CartItem cartItem = new CartItem("ITEM000001", 2);
+        List<DiscountPromotion> discountPromotions = discountParse.parseDiscount(Arrays.asList("ITEM000001:70", "ITEM000001:70"));
+
+        discountPromotions.forEach(DiscountPromotion::prepare);
+        double price = posMachine.calculate(cartItem);
+        discountPromotions.forEach(DiscountPromotion::cancle);
+
+        assertEquals(price, 39.2d, 1E-5);
+    }
+
+    /*@Test
+    public void theTotalPriceOfSimpleTypeGoodsShouldBe60WhenSecondHalfPrice(){
+        CartItem cartItem = new CartItem("ITEM000001", 2);
+        List<DiscountPromotion> discountPromotions = discountParse.parseDiscount(Arrays.asList("ITEM000001"));
+
+        discountPromotions.forEach(DiscountPromotion::prepare);
+        double price = posMachine.calculate(cartItem);
+        discountPromotions.forEach(DiscountPromotion::cancle);
+
+        System.out.println(price);
+        assertThat(price, is(60d));
+    }*/
+
+    @Test
+    public void theTotalPriceOfSimpleTypeGoodsShouldBe56WhenDiscountItem000001AndSecondHalfPrice(){
+        CartItem cartItem = new CartItem("ITEM000001", 2);
+        List<DiscountPromotion> discountPromotions = discountParse.parseDiscount(Arrays.asList("ITEM000001:70", "ITEM000001"));
+
+        discountPromotions.forEach(DiscountPromotion::prepare);
+        double price = posMachine.calculate(cartItem);
+        discountPromotions.forEach(DiscountPromotion::cancle);
+
+        assertThat(price, is(28d));
     }
 
     @Test
@@ -105,4 +145,6 @@ public class PosMachineTest {
 
         assertThat(totalPrice, is(468d));
     }
+
+
 }
