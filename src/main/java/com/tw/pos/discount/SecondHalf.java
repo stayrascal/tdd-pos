@@ -1,37 +1,28 @@
 package com.tw.pos.discount;
 
-import com.tw.pos.entity.Goods;
+import com.tw.pos.entity.CartItem;
 
 
-public class SecondHalf implements DiscountPromotion {
+public class SecondHalf implements Discount {
 
-    private Goods goods;
+    private double price;
 
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public SecondHalf(Goods goods) {
-        this.goods = goods;
+    @Override
+    public double apply(CartItem cartItem, double price) {
+        this.price = price;
+        double sum = 0;
+        for (int i = 1; i <= cartItem.getNumber(); i++){
+            if (i % 2 == 0){
+                sum += price / 2;
+            } else {
+                sum += price;
+            }
+        }
+        return sum;
     }
 
     @Override
-    public void apply() {
-        goods.setPrice(goods.getPrice() / 2);
-    }
-
-    @Override
-    public void prepare() {
-        goods.addDiscountPromotion(this);
-    }
-
-    @Override
-    public void cancle() {
-        goods.setPrice(goods.getPrice() * 2);
-        goods.removeDiscountPromotion(this);
+    public double getDiscountPrice(double originPrice) {
+        return price;
     }
 }

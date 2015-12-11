@@ -4,11 +4,8 @@ package com.tw.pos.parse;
 import com.tw.pos.discount.Discount;
 import com.tw.pos.discount.DiscountPromotion;
 import com.tw.pos.discount.SecondHalf;
-import com.tw.pos.entity.Goods;
-import com.tw.pos.entity.GoodsRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class DiscountParse {
@@ -16,8 +13,8 @@ public class DiscountParse {
     private static final Pattern DISCOUNT_PATTERN = Pattern.compile("^\\w+:\\d+$");
     private static final Pattern SECOND_HALF_PATTERN = Pattern.compile("^\\w+$");
 
-    public List<DiscountPromotion> parseDiscount(List<String> discountInfoStrList) {
-        List<DiscountPromotion> discountPromotions = new ArrayList<>();
+    public Map<String, List<Discount>> parseDiscount(List<String> discountInfoStrList) {
+        Map<String, List<Discount>> discountMap = new HashMap<>();
         discountInfoStrList.forEach(discountInfo->{
             if (!DISCOUNT_PATTERN.matcher(discountInfo).matches() && !SECOND_HALF_PATTERN.matcher(discountInfo).matches()){
                 throw new IllegalArgumentException("invalid discountInfo input");
@@ -25,17 +22,30 @@ public class DiscountParse {
 
             if (DISCOUNT_PATTERN.matcher(discountInfo).matches()){
                 String[] discountInfoStr = discountInfo.split(":");
-                Goods goods = GoodsRepository.getGoodsByBarcode(discountInfoStr[0]);
-                DiscountPromotion discount = new Discount(goods, Double.valueOf(discountInfoStr[1]));
-                discountPromotions.add(discount);
+
+                String barcode = discountInfoStr[0];
+                Discount discount = new DiscountPromotion(Double.valueOf(discountInfoStr[1]));
+                addDiscount(discountMap, barcode, discount);
             }
 
             if (SECOND_HALF_PATTERN.matcher(discountInfo).matches()){
-                Goods goods = GoodsRepository.getGoodsByBarcode(discountInfo.trim());
-                DiscountPromotion secondHalf = new SecondHalf(goods);
-                discountPromotions.add(secondHalf);
+                String barcode = discountInfo.trim();
+                Discount discount = new SecondHalf();
+                addDiscount(discountMap, barcode, discount);
             }
         });
-        return discountPromotions;
+        return discountMap;
     }
+
+    private void addDiscount(Map<String, List<Discount>> discountMap, String barcode, Discount discount) {
+        List<Discount> discountList= discountMap.get(barcode);
+        if (discountList == null || discountList.size() == 0){
+            discountList = new ArrayList<>();
+            discountList.add(discount);
+        }else{
+            discountList.add(discount);
+        }
+        discountMap.put(barcode, discountList);
+    }
+
 }

@@ -1,11 +1,23 @@
 package com.tw.pos.discount;
 
 
-public interface DiscountPromotion {
+import com.tw.pos.entity.CartItem;
 
-    void apply();
+public class DiscountPromotion implements Discount {
 
-    void prepare();
+    private double discountRate;
 
-    void cancle();
+    public DiscountPromotion(double discountRate) {
+        this.discountRate = discountRate / 100d;
+    }
+
+    @Override
+    public double apply(CartItem cartItem, double price) {
+        return cartItem.getNumber() * price * this.discountRate;
+    }
+
+    @Override
+    public double getDiscountPrice(double originPrice) {
+        return originPrice * discountRate;
+    }
 }
