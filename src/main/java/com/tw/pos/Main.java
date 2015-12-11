@@ -9,6 +9,7 @@ import com.tw.pos.parse.DiscountParse;
 import com.tw.pos.parse.GoodsParse;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class Main {
         DiscountParse discountParse = new DiscountParse();
 
         //Map<String, List<Discount>> discountMap = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90"));
-        Map<String, List<Discount>> discountMap = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90", "ITEM000001", "ITEM000005"));
+        Map<String, LinkedList<Discount>> discountMap = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90", "ITEM000001", "ITEM000005"));
 
         DiscountManager discountManager = new DiscountManager(discountMap);
         PosMachine posMachine = new PosMachine(goodses, discountManager);

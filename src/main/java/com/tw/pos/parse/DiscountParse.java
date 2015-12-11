@@ -13,8 +13,8 @@ public class DiscountParse {
     private static final Pattern DISCOUNT_PATTERN = Pattern.compile("^\\w+:\\d+$");
     private static final Pattern SECOND_HALF_PATTERN = Pattern.compile("^\\w+$");
 
-    public Map<String, List<Discount>> parseDiscount(List<String> discountInfoStrList) {
-        Map<String, List<Discount>> discountMap = new HashMap<>();
+    public Map<String, LinkedList<Discount>> parseDiscount(List<String> discountInfoStrList) {
+        Map<String, LinkedList<Discount>> discountMap = new HashMap<>();
         discountInfoStrList.forEach(discountInfo->{
             if (!DISCOUNT_PATTERN.matcher(discountInfo).matches() && !SECOND_HALF_PATTERN.matcher(discountInfo).matches()){
                 throw new IllegalArgumentException("invalid discountInfo input");
@@ -37,12 +37,14 @@ public class DiscountParse {
         return discountMap;
     }
 
-    private void addDiscount(Map<String, List<Discount>> discountMap, String barcode, Discount discount) {
-        List<Discount> discountList= discountMap.get(barcode);
+    private void addDiscount(Map<String, LinkedList<Discount>> discountMap, String barcode, Discount discount) {
+        LinkedList<Discount> discountList= discountMap.get(barcode);
         if (discountList == null || discountList.size() == 0){
-            discountList = new ArrayList<>();
-            discountList.add(discount);
-        }else{
+            discountList = new LinkedList<>();
+        }
+        if (discount instanceof DiscountPromotion){
+            discountList.addFirst(discount);
+        } else {
             discountList.add(discount);
         }
         discountMap.put(barcode, discountList);

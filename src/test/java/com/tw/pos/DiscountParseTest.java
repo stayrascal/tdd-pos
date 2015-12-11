@@ -8,10 +8,7 @@ import com.tw.pos.parse.DiscountParse;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -28,7 +25,7 @@ public class DiscountParseTest {
 
     @Test
     public void shouldReturnDiscountInfoWhenParseDiscountBarcodeInfo(){
-        Map<String, List<Discount>> discounts = discountParse.parseDiscount(Collections.singletonList("ITEM000001:75"));
+        Map<String, LinkedList<Discount>> discounts = discountParse.parseDiscount(Collections.singletonList("ITEM000001:75"));
 
         assertThat(discounts.get("ITEM000001").size(), is(1));
         assertThat(discounts.get("ITEM000001").get(0) instanceof DiscountPromotion, is(true));
@@ -36,7 +33,16 @@ public class DiscountParseTest {
 
     @Test
     public void shouldReturnDiscountInfoWhenParseDifferentDiscountBarcodeInfo(){
-        Map<String, List<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001:75","ITEM000001"));
+        Map<String, LinkedList<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000001"));
+
+        assertThat(discounts.get("ITEM000001").size(), is(2));
+        assertThat(discounts.get("ITEM000001").get(0) instanceof DiscountPromotion, is(true));
+        assertThat(discounts.get("ITEM000001").get(1) instanceof SecondHalf, is(true));
+    }
+
+    @Test
+    public void shouldReturnDiscountInfoWhenParseSecondHlatFirstAndTheDiscountBarcodeInfo(){
+        Map<String, LinkedList<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001", "ITEM000001:75"));
 
         assertThat(discounts.get("ITEM000001").size(), is(2));
         assertThat(discounts.get("ITEM000001").get(0) instanceof DiscountPromotion, is(true));
@@ -45,7 +51,7 @@ public class DiscountParseTest {
 
     @Test
     public void shouldReturnDiscountInfoWhenParseMultipleDiscountBarcodeInfo(){
-        Map<String, List<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90"));
+        Map<String, LinkedList<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90"));
 
         assertThat(discounts.get("ITEM000001").size(), is(1));
         assertThat(discounts.get("ITEM000005").size(), is(1));
@@ -55,7 +61,7 @@ public class DiscountParseTest {
 
     @Test
     public void shouldReturnDiscountInfoWhenParseComplexDiscountBarcodeInfo(){
-        Map<String, List<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90","ITEM000001","ITEM000005"));
+        Map<String, LinkedList<Discount>> discounts = discountParse.parseDiscount(Arrays.asList("ITEM000001:75", "ITEM000005:90", "ITEM000001", "ITEM000005"));
 
         assertThat(discounts.get("ITEM000001").size(), is(2));
         assertThat(discounts.get("ITEM000005").size(), is(2));
