@@ -1,1 +1,5 @@
-.idea/
+*.iml
+.idea/*
+.gradle/*
+build/*
+>>>>>>> 72e8ae5ffcb8ab325410739e63db659c977a8cf2
