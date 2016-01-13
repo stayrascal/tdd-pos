@@ -3,7 +3,7 @@
 
 describe('Second Half Discount', function(){
     describe('apply()', function(){
-        it('should return -1 when the value is not present', function(){
+        it('should charge 40 when apply second half discount for 5 items which price is 10', function(){
             var secondHalf = new SecondHalf();
             var cartItem = { number: 5 };
             var sum = secondHalf.apply(cartItem ,10);
