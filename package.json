@@ -1,32 +1,21 @@
 {
-  "name": "tdd-pos",
+  "name": "karma",
   "version": "1.0.0",
-  "description": "tdd pos machine",
+  "description": "karma test",
   "main": "js/index.js",
   "scripts": {
     "test": "karma start"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stayrascal/tdd-pos.git"
+    "url": "git@github.com:stayrascal/tdd-pos.git"
   },
   "keywords": [
     "tdd"
   ],
-  "author": "Zhiping Wu",
-  "license": "ISC",
+  "author": "rascal",
+  "license": "isc",
   "bugs": {
     "url": "https://github.com/stayrascal/tdd-pos/issues"
-  },
-  "homepage": "https://github.com/stayrascal/tdd-pos#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "chai": "^3.4.1",
-    "karma": "^0.13.19",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-cli": "^0.1.2",
-    "karma-mocha": "^0.2.1",
-    "mocha": "^2.3.4"
   }
 }
